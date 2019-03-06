@@ -1,4 +1,4 @@
-import numpy as np 
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -12,7 +12,7 @@ def _rdp_rec(poly, epsilon):
     cnt = poly.shape[0]
     if cnt == 2:
         return [0, 1]
-    
+
     max_dist = 0
     max_idx = -1
 
@@ -21,16 +21,16 @@ def _rdp_rec(poly, epsilon):
         if dist > max_dist:
             max_dist = dist
             max_idx = i
-    
+
     if max_dist > epsilon:
         left_ids = _rdp_rec(poly[:(max_idx + 1), :], epsilon)
         right_ids = _rdp_rec(poly[max_idx:, :], epsilon)
-    
+
         right_ids = np.arange(max_idx, cnt)[right_ids]
         final_ids = np.hstack((left_ids[:-1], right_ids))
     else:
         final_ids = np.array([0, cnt - 1])
-    
+
     return final_ids
 
 
@@ -62,14 +62,14 @@ def _rdp_iter(poly, epsilon):
             if dist > max_dist:
                 max_dist = dist
                 max_idx = i
-        
+
         if max_dist > epsilon:
             sep.append([start, max_idx])
             sep.append([max_idx, end])
         else:
             for i in range(start + 1, end):
                 indices[i] = False
-    
+
     return np.where(indices)[0]
 
 
@@ -87,8 +87,9 @@ def rdp_iter(poly, epsilon):
 if __name__ == '__main__':
     """
     Ramer–Douglas–Peucker algorithm for line simplification
+    I check my code by comparing with 'https://github.com/fhirschmann/rdp'
     """
-    
+
     x = np.linspace(0, 100, 1000)
     y = x**3
 
